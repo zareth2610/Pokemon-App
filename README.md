@@ -22,4 +22,8 @@ Ejecuta la aplicación en un emulador o dispositivo móvil como expo go.
 npm install axios,
 yarn install,
 yarn start, 
-npx expo start.
+npx expo start,
+expo build:android.
+
+# Apk
+https://expo.dev/artifacts/eas/vx2yeMC3CYX47mB7EsMQg3.aab esta url sirve para descargar el archivo apk
