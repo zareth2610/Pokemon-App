@@ -26,4 +26,4 @@ npx expo start,
 expo build:android.
 
 # Apk
-https://expo.dev/artifacts/eas/8sUTDkpdtupsb1bC38jV8P.apk esta url sirve para descargar el archivo apk
+https://expo.dev/artifacts/eas/ub4K2SkyT93FAtjqGXxekz.apk esta url sirve para descargar el archivo apk
