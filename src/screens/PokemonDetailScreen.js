@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
+import ProgressBar from 'react-native-progress-bar-horizontal';
 
 const PokemonDetailScreen = ({ route }) => {
   const [pokemon, setPokemon] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState('#f5f5f5');
+  const [backgroundColor, setBackgroundColor] = useState('#000');
 
   useEffect(() => {
     loadPokemonDetails();
@@ -53,50 +54,84 @@ const PokemonDetailScreen = ({ route }) => {
       </View>
     );
   }
-
+  const options = ['about', 'stats', 'moves', 'evolutions']
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.header}>
-        <Text style={styles.name}>{pokemon.name}</Text>
+        <Text style={[styles.name, { color: '#FFF' }]}>{pokemon.name}</Text>
         <Image source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png` }} style={styles.image} />
       </View>
-      <View style={styles.details}>
-        <DetailItem label="ID" value={pokemon.id} />
-        <DetailItem label="Height" value={`${pokemon.height / 10} m`} />
-        <DetailItem label="Weight" value={`${pokemon.weight / 10} kg`} />
-        <DetailItem label="Base Experience" value={pokemon.base_experience} />
-        <Text style={styles.sectionHeader}>Abilities:</Text>
-        {pokemon.abilities.map((ability, index) => (
-          <DetailItem key={index} value={ability.ability.name} />
-        ))}
+      <View style={[styles.details, { color: '#FFF' }]}>
+        <View style={styles.containerOptions}>
+          {options.map(option => {
+            return (
+              <View>
+                <Text style={[styles.nameOptions, { color: '#FFF' }]}>{option}</Text>
+              </View>
+            )
+          })}
+        </View>
+        {/* <DetailItem label="ID" value={pokemon.id} /> */}
+        <DetailItem label="Height" value={`${pokemon.height / 10} m`} progress={0.8} />
+        <DetailItem label="Weight" value={`${pokemon.weight / 10} kg`} progress={0.4} />
+        <DetailItem label="XP" value={pokemon.base_experience} progress={0.6} />
+        <Text style={[styles.sectionHeader, { color: '#808080' }]}>Abilities:</Text>
+        {pokemon.abilities.map((ability, index) => {
+          console.log(ability);
+          return (
+            <DetailItem key={index} value={ability.ability.name} progress={0.9} />
+          )
+        })}
       </View>
+      
     </View>
   );
 };
 
-const DetailItem = ({ label, value }) => (
-  <Text style={styles.detailText}>
-    {label}: {value}
-  </Text>
-);
+const DetailItem = ({ label, value, progress }) => {
+  return (
+    <View style={styles.containerDetailText}>
+      {label && <Text style={[styles.detailText, { color: '#808080' }]}>
+        {label}
+      </Text>}
+      <Text style={[styles.detailText, { color: '#FFF' }]}>
+        {value}
+      </Text>
+      <View style={styles.stick}>
+        <ProgressBar
+          progress={progress}
+          borderWidth={1}
+          fillColor="#7fff00"
+          unfilledColor="#a9a9a9"
+          height={7}
+          width={150}
+          borderColor="#a9a9a9"
+          duration={100}
+        />
+      </View>
+    </View>
+  )
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    justifyContent: 'space-between',
+
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   header: {
     alignItems: 'center',
     marginBottom: 10,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 240,
+    height: 240,
     marginBottom: 5,
   },
   name: {
@@ -105,19 +140,46 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   details: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    elevation: 3,
+    backgroundColor: '#191919',
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    width: '100%',
+    flex: 2,
+    paddingTop: 50,
+    paddingHorizontal: 20,
   },
+  containerDetailText: {
+    marginBottom: 15,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
   detailText: {
     fontSize: 18,
-    marginBottom: 10,
+    flex: 1,
   },
+
+  stick: {
+    alignSelf: 'center',
+  },
+
   sectionHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+
+  },
+
+  containerOptions: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    marginBottom: 60,
+  },
+  nameOptions: {
+    fontSize: 18,
+    textAlign: 'center',
   },
 });
 
